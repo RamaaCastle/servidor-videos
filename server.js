@@ -16,6 +16,11 @@ if (!fs.existsSync(UPLOADS_FOLDER)) {
     fs.mkdirSync(UPLOADS_FOLDER);
 }
 
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
+
 // Configurar Multer para almacenar videos
 const storage = multer.diskStorage({
     destination: UPLOADS_FOLDER,
