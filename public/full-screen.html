@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla Completa</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            pointer-events: none; /* Evita interacciones no deseadas */
+        }
+        video {
+            width: 100vh;
+            height: 100vw;
+            object-fit: cover;
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body oncontextmenu="return false"> <!-- Evita clic derecho -->
+    <video id="fullScreenVideo" autoplay muted preload="auto" controls></video>
+
+    <script>
+        const SERVER_URL = "http://192.168.100.89:3000"; // Reemplaza con tu IP local
+        const videoElement = document.getElementById("fullScreenVideo");
+
+        async function getVideos() {
+            try {
+                const response = await fetch(`${SERVER_URL}/videos`);
+                return await response.json();
+            } catch (error) {
+                console.error("Error al obtener los videos:", error);
+                return [];
+            }
+        }
+
+        async function playVideos() {
+            const videos = await getVideos();
+            let index = 0;
+
+            if (videos.length === 0) {
+                console.error("No hay videos disponibles");
+                return;
+            }
+
+            const playMode = localStorage.getItem("playMode") || "ordered";
+
+            if (playMode === "shuffle") {
+                videos.sort(() => Math.random() - 0.5); // Mezcla aleatoria
+            }
+
+            function playNext() {
+                videoElement.src = `${SERVER_URL}/videos/${videos[index]}`;
+                videoElement.play();
+                index = (index + 1) % videos.length; // Reproduce en bucle
+            }
+
+            videoElement.onended = playNext;
+            playNext();
+        }
+
+        playVideos();
+    </script>
+</body>
+</html>

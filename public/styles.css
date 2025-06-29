@@ -1,0 +1,76 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Header */
+header {
+    background-color: #1f1f1f;
+    padding: 20px;
+    font-size: 24px;
+}
+
+/* Contenedor principal */
+.container {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    background: #222;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Botones */
+button {
+    background: #00A86B;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #008B5E;
+}
+
+/* Input */
+.file-label {
+    display: inline-block;
+    background: #555;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* Miniaturas de video */
+.video-container {
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+}
+
+.video-container video {
+    width: 150px;
+    height: 100px;
+    border-radius: 5px;
+    border: 2px solid #00A86B;
+}
+
+/* Controles */
+.controls {
+    margin: 15px 0;
+}

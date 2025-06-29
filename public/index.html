@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Exposición</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Inmobiliaria Exposición</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <label for="fileInput" id="fileInputLabel">Seleccionar Videos</label>
+        <input type="file" id="fileInput" multiple accept="video/*">
+        <button id="uploadButton">Subir Videos</button>
+
+        <h2>Lista de Videos</h2>
+        <div class="controls">
+            <button id="shuffleButton">Reproducción Aleatoria</button>
+            <button id="orderButton">Seleccionar Orden</button>
+        </div>
+
+        <div class="gallery" id="videoGallery"></div>
+    </div>
+
+    <script>
+        const SERVER_URL = "http://192.168.100.89:3000"; // Reemplaza con tu IP local
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadButton');
+        const videoGallery = document.getElementById('videoGallery');
+        const shuffleButton = document.getElementById('shuffleButton');
+        const orderButton = document.getElementById('orderButton');
+
+        // 📤 Subir videos al servidor
+        uploadButton.addEventListener('click', async () => {
+            if (fileInput.files.length === 0) {
+                alert('Selecciona al menos un video.');
+                return;
+            }
+
+            for (const file of fileInput.files) {
+                const formData = new FormData();
+                formData.append('video', file);
+
+                try {
+                    const response = await fetch(`${SERVER_URL}/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert('✅ Video subido con éxito');
+                        loadVideos();
+                    } else {
+                        alert('❌ Error al subir el video');
+                    }
+                } catch (error) {
+                    console.error('Error al subir:', error);
+                }
+            }
+        });
+
+        // 📂 Cargar y mostrar los videos en el panel
+        async function loadVideos() {
+            try {
+                const response = await fetch(`${SERVER_URL}/videos`);
+                const videos = await response.json();
+                videoGallery.innerHTML = "";
+
+                videos.forEach(video => {
+                    const videoContainer = document.createElement("div");
+                    videoContainer.classList.add("video-container");
+
+                    const videoElement = document.createElement("video");
+                    videoElement.src = `${SERVER_URL}/videos/${video}`;
+                    videoElement.controls = true;
+                    videoElement.width = 150;
+                    videoElement.height = 100;
+
+                    const deleteButton = document.createElement("button");
+                    deleteButton.innerText = "❌";
+                    deleteButton.classList.add("delete-btn");
+                    deleteButton.onclick = async () => {
+                        if (confirm("¿Seguro que quieres eliminar este video?")) {
+                            try {
+                                const deleteResponse = await fetch(`${SERVER_URL}/delete/${video}`, {
+                                    method: "DELETE"
+                                });
+
+                                if (deleteResponse.ok) {
+                                    alert("🗑️ Video eliminado con éxito");
+                                    loadVideos();
+                                } else {
+                                    alert("❌ Error al eliminar el video");
+                                }
+                            } catch (error) {
+                                console.error("Error al eliminar:", error);
+                            }
+                        }
+                    };
+
+                    videoContainer.appendChild(videoElement);
+                    videoContainer.appendChild(deleteButton);
+                    videoGallery.appendChild(videoContainer);
+                });
+            } catch (error) {
+                console.error('Error al cargar videos:', error);
+            }
+        }
+
+        // 🎵 Guardar modo de reproducción
+        shuffleButton.addEventListener('click', () => localStorage.setItem('playMode', 'shuffle'));
+        orderButton.addEventListener('click', () => localStorage.setItem('playMode', 'ordered'));
+
+        document.addEventListener('DOMContentLoaded', loadVideos);
+    </script>
+</body>
+</html>
