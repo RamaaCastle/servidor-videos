@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Habilita CORS para permitir acceso desde la tele
 app.use(cors());
@@ -67,7 +67,7 @@ app.delete('/delete/:filename', (req, res) => {
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+   console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
     console.log(`📡 Accede desde otro dispositivo: http://192.168.100.89:${PORT}`);
     console.log(`🎬 Ver pantalla completa en: http://192.168.100.89:${PORT}/pantalla`);
 });
