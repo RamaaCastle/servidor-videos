@@ -16,6 +16,11 @@ if (!fs.existsSync(UPLOADS_FOLDER)) {
     fs.mkdirSync(UPLOADS_FOLDER);
 }
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
