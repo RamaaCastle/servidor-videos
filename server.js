@@ -67,7 +67,7 @@ app.delete('/delete/:filename', (req, res) => {
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-   console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
-    console.log(`📡 Accede desde otro dispositivo: http://192.168.100.89:${PORT}`);
-    console.log(`🎬 Ver pantalla completa en: http://192.168.100.89:${PORT}/pantalla`);
+    console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
+    console.log(`🎬 Ver pantalla completa en: /pantalla`);
 });
+
